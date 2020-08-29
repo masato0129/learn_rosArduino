@@ -3,6 +3,7 @@
 #include <ros.h>
 #include <std_msgs/String.h>
 #include <std_msgs/Bool.h>
+#include <imu.hpp>
 
 ros::NodeHandle  nh;
 std_msgs::String str_msg;
