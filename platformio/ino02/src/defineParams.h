@@ -12,34 +12,18 @@
 #ifndef __DEFINEPARAMS_H__
 #define __DEFINEPARAMS_H__
 
-#include "Arduino.h"
+// 推進機
+const uint8_t MOTOR_RIGHT_FRONT_PWM_PIN  = 5;
+const uint8_t MOTOR_RIGHT_CENTER_PWM_PIN = 6;
+const uint8_t MOTOR_RIGHT_REAR_PWM_PIN   = 9;
+const uint8_t MOTOR_LEFT_FRONT_PWM_PIN   = 10;
+const uint8_t MOTOR_LEFT_CENTER_PWM_PIN  = 11;
+const uint8_t MOTOR_LEFT_REAR_PWM_PIN    = 13;
 
-// モーター1
-const uint8_t MOTOR1_PLUS_PIN    = 1;
-const uint8_t MOTOR1_MINUS_PIN   = 0;
-const uint8_t MOTOR1_PWM_PIN     = 5;
-const uint8_t MOTOR1_CURRENT_PIN = A3;
-
-// モーター2
-const uint8_t MOTOR2_PLUS_PIN    = 4;
-const uint8_t MOTOR2_MINUS_PIN   = 7;
-const uint8_t MOTOR2_PWM_PIN     = 6;
-const uint8_t MOTOR2_CURRENT_PIN = A2;
-
-// モーター3
-const uint8_t MOTOR3_PLUS_PIN    = 8;
-const uint8_t MOTOR3_MINUS_PIN   = 9;
-const uint8_t MOTOR3_PWM_PIN     = 10;
-const uint8_t MOTOR3_CURRENT_PIN = A1;
-
-// モーター4
-const uint8_t MOTOR4_PLUS_PIN    = 11;
-const uint8_t MOTOR4_MINUS_PIN   = 12;
-const uint8_t MOTOR4_PWM_PIN     = 13;
-const uint8_t MOTOR4_CURRENT_PIN = A0;
-
-// 深度センサ
-const uint8_t DEPTH_PIN = A5;
+// pwm信号の上下限
+const uint32_t MOTOR_SIGNAL_STOP = 1500; 
+const uint32_t MOTOR_SIGNAL_MAX = 1900; 
+const uint32_t MOTOR_SIGNAL_MIN = 1100; 
 
 // imu関係
 #define I2Cclock 400000
@@ -48,6 +32,12 @@ const uint8_t DEPTH_PIN = A5;
 //#define MPU9250_ADDRESS MPU9250_ADDRESS_AD1
 #define AHRS true         // Set to false for basic data read
 
+// yaw角のオフセット
+// Tokyo tama river (35° 35' 21" N 139° 39' 50" E) is
+//    7° 39' W  ± 0° 19'()  changing by  0° 4' W per year
+// - http://www.ngdc.noaa.gov/geomag-web/#declination
+const float YAW_OFFSET = 7.65; 
+
 // シリアル通信
 #define BAUNDRATE 115200
 
@@ -55,6 +45,6 @@ const uint8_t DEPTH_PIN = A5;
 #define DVICE_ERORR 0xFF
 
 // デバッグ関係
-#define SerialDebug false  // Set to true to get Serial output for debugging
+#define SerialDebug false
 
 #endif // __DEFINEPARAMS_H__
