@@ -13,7 +13,6 @@
 #include <SparkFun_MPU-9250_Breakout_Arduino_Library/src/quaternionFilters.h>
 
 #include <defineParams.h>
-#include <tagDefine.h>
 
 
 #ifndef __IMU_HPP__
@@ -25,24 +24,26 @@ public:
     Imu();
     ~Imu();
     void init();
-    imuData_t update();
+    void update();
+
+    float ax;
+    float ay;
+    float az;
+
+    float gx;
+    float gy;
+    float gz;
+
+    float mx;
+    float my;
+    float mz;
+
 private:
-
     MPU9250* imu;
-    void countup();
-    linear_t getAccelData(MPU9250* imu);
-    angular_t getGyroData(MPU9250* imu);
-    linear_t getMagData(MPU9250* imu);
+    void getAccelData(MPU9250* imu);
+    void getGyroData(MPU9250* imu);
+    void getMagData(MPU9250* imu);
     float getTemplature(MPU9250* imu);
-
-    imuData_t imuData = {
-        0,//count
-        0,//status 
-        {0.0, 0.0, 0.0}, //acc
-        {0.0, 0.0, 0.0}, //gyro
-        {0.0, 0.0, 0.0}, //mag
-        0.0 //temperature
-    };
 };
 
 #endif // __IMU_HPP__

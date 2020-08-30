@@ -1,36 +1,52 @@
 #define USE_USBCON // for atmega32u4
 
 #include <ros.h>
-#include <std_msgs/String.h>
-#include <std_msgs/Bool.h>
+#include <sensor_msgs/Imu.h>
+#include <sensor_msgs/MagneticField.h>
+
 #include <imu.hpp>
 
-ros::NodeHandle  nh;
-std_msgs::String str_msg;
-ros::Publisher chatter("chatter", &str_msg);
-char hello[13] = "hello world!";
+Imu imu;
 
-void led_cb(const std_msgs::Bool& msg){
-  if(msg.data)digitalWrite(13, HIGH);
-  else digitalWrite(13, LOW);
-}
-ros::Subscriber<std_msgs::Bool> sub0("led", &led_cb);
+ros::NodeHandle  nh;
+
+sensor_msgs::Imu imuMsg;
+sensor_msgs::MagneticField magMsg;
+
+ros::Publisher pubimu("imu/data_raw", &imuMsg);
+ros::Publisher pubMag("imu/mag", &magMsg);
 
 void setup()
 {
+  nh.getHardware()->setBaud(115200);
   nh.initNode();
-  nh.advertise(chatter);
-  nh.subscribe(sub0);
-
-  pinMode(LED_BUILTIN, OUTPUT);
-  pinMode(13, OUTPUT);
+  nh.advertise(pubimu);
+  nh.advertise(pubMag);
+  imu.init();
 }
 
 void loop()
 {
-  str_msg.data = hello;
-  chatter.publish( &str_msg );
+  imu.update();
+
+  imuMsg.header.frame_id = "imu_link";
+  imuMsg.header.stamp = nh.now();
+  imuMsg.linear_acceleration.x = imu.ax;
+  imuMsg.linear_acceleration.y = imu.ay;
+  imuMsg.linear_acceleration.z = imu.az;
+  imuMsg.angular_velocity.x = imu.gx;
+  imuMsg.angular_velocity.y = imu.gy;
+  imuMsg.angular_velocity.z = imu.gz;
+
+  pubimu.publish(&imuMsg);
+
+  magMsg.header.frame_id = "mag_link";
+  magMsg.header.stamp = nh.now();
+  magMsg.magnetic_field.x = imu.mx;
+  magMsg.magnetic_field.y = imu.my;
+  magMsg.magnetic_field.z = imu.mz;
+  pubMag.publish(&magMsg);
+
   nh.spinOnce();
   delay(500);
 }
-
