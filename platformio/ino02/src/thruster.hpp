@@ -12,7 +12,6 @@
 #ifndef __THRUSTER_HPP__
 #define __THRUSTER_HPP__
 
-#include <Arduino.h>
 #include <Servo.h>
 #include "defineParams.h"
 
